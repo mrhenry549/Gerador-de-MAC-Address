@@ -3,23 +3,26 @@ package gerador.de.mac.address;
 import java.util.Random;
 
 public class Gerador {
-    
-    String[] hexadecimal, macValues;
-    int par1, par2;
+
     Random rand;
-    
-    public Gerador(){
-        hexadecimal = new String[]{"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
-        macValues = new String[6];
+
+    public Gerador() {
         rand = new Random();
-        
-        for(int i = 0; i < 6; i++){
-            par1 = rand.nextInt(hexadecimal.length);
-            par2 = rand.nextInt(hexadecimal.length);
-            
-            macValues[i] = hexadecimal[par1]+hexadecimal[par2];
+        byte[] macAddr = new byte[6];
+        rand.nextBytes(macAddr);
+
+        macAddr[0] = (byte) (macAddr[0] & (byte) 254);
+
+        StringBuilder MAC = new StringBuilder(18);
+        for (byte b : macAddr) {
+
+            if (MAC.length() > 0) {
+                MAC.append(":");
+            }
+
+            MAC.append(String.format("%02x", b));
         }
-        
-        System.out.println("MAC Address gerado: "+macValues[0]+":"+macValues[1]+":"+macValues[2]+":"+macValues[3]+":"+macValues[4]+":"+macValues[5]);
+
+        System.out.println(MAC.toString());
     }
 }
